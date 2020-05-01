@@ -1,9 +1,4 @@
-// Copyright 2018 The Flutter Team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,51 +6,101 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
+      title: '麻雀得点計算App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("麻雀得点計算App"),
+          centerTitle: true,
+        ),
+        body: Card(
+          child: MohjangScore(),
+        ),
+      ),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
+class MohjangScore extends StatefulWidget {
   @override
-  RandomWordsState createState() => RandomWordsState();
+  MohjangScoreState createState() => MohjangScoreState();
 }
 
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+class MohjangScoreState extends State<MohjangScore> {
+  int _hu = 30;
+  int _han = 1;
+  var _parentScore = {"ron": 1500, "draw": 500};
+  var _childScore = {"ron": 1000, "draw": 300};
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
+    // return Text("${this._hu}符${this._han}翻");
+    return Column(
+      children: <Widget>[
+        _ScoreArea(),
+        // _DataArea(),
+        _ButtonArea(),
+      ],
     );
   }
 
-  Widget _buildSuggestions() {
-    return ListView.builder(
-    padding: const EdgeInsets.all(16.0),
-    itemBuilder: /*1*/ (context, i) {
-      if (i.isOdd) return Divider(); /*2*/
+  Widget _ScoreArea() {
+    final tableTextStyle =
+        TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold);
 
-        final index = i ~/ 2; /*3*/
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-        }
-        return _buildRow(_suggestions[index]);
+    return Column(
+      children: [
+        Container(
+          child: Text("${this._hu}符${this._han}翻", style: tableTextStyle),
+        ),
+        Table(
+          children: [
+            TableRow(
+              children: [
+                Text(""),
+                Text("ロン", style: tableTextStyle),
+                Text("ツモ", style: tableTextStyle),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text("親", style: tableTextStyle),
+                Text("${this._parentScore["ron"]}", style: tableTextStyle),
+                Text("${this._parentScore["draw"]}" + "A", style: tableTextStyle),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text("子", style: tableTextStyle),
+                Text("${this._childScore["ron"]}", style: tableTextStyle),
+                Text("${this._childScore["draw"]}", style: tableTextStyle),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _handlePressed() {
+    setState(() {
+      this._hu++;
+      this._han++;
     });
   }
 
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+  Widget _ButtonArea() {
+    return Container(
+      child: FlatButton(
+        onPressed: _handlePressed,
+        color: Colors.blue,
+        child: Text(
+          "点数を表示",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+          ),
+        ),
       ),
     );
   }
 }
-
