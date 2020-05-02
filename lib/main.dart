@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,19 +14,19 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
         body: Card(
-          child: MohjangScore(),
+          child: MahjongScore(),
         ),
       ),
     );
   }
 }
 
-class MohjangScore extends StatefulWidget {
+class MahjongScore extends StatefulWidget {
   @override
-  MohjangScoreState createState() => MohjangScoreState();
+  MahjongScoreState createState() => MahjongScoreState();
 }
 
-class MohjangScoreState extends State<MohjangScore> {
+class MahjongScoreState extends State<MahjongScore> {
   int _hu = 30;
   int _han = 1;
   var _parentScore = {"ron": 1500, "draw": 500};
@@ -33,11 +34,10 @@ class MohjangScoreState extends State<MohjangScore> {
 
   @override
   Widget build(BuildContext context) {
-    // return Text("${this._hu}符${this._han}翻");
     return Column(
       children: <Widget>[
         _ScoreArea(),
-        // _DataArea(),
+        _DataArea(),
         _ButtonArea(),
       ],
     );
@@ -65,7 +65,8 @@ class MohjangScoreState extends State<MohjangScore> {
               children: [
                 Text("親", style: tableTextStyle),
                 Text("${this._parentScore["ron"]}", style: tableTextStyle),
-                Text("${this._parentScore["draw"]}" + "A", style: tableTextStyle),
+                Text("${this._parentScore["draw"]}" + "A",
+                    style: tableTextStyle),
               ],
             ),
             TableRow(
@@ -81,10 +82,67 @@ class MohjangScoreState extends State<MohjangScore> {
     );
   }
 
+  int _selectedItem = 30;
+
+  final List<int> _items = [
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+  ];
+
+  Widget _pickerItem(int h) {
+    return Text(h.toString(), style: TextStyle(fontSize: 32));
+  }
+
+  Widget _onSelectedItemChanged(int index) {
+    setState(() {
+      _selectedItem = _items[index];
+    });
+  }
+
+  void _showModalPicker(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: CupertinoPicker(
+              itemExtent: 40,
+              children: _items.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedItemChanged,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _DataArea() {
+    return RaisedButton(
+      onPressed: () {
+        _showModalPicker(context);
+      },
+      child: Text("${_selectedItem}"),
+    );
+  }
+
   void _handlePressed() {
     setState(() {
-      this._hu++;
-      this._han++;
+      this._hu = _selectedItem;
+      // this._hu++;
+      // this._han++;
     });
   }
 
