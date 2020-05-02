@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:math' as Math;
 
 void main() => runApp(MyApp());
 
@@ -46,6 +47,9 @@ class MahjongScoreState extends State<MahjongScore> {
   Widget _ScoreArea() {
     final tableTextStyle =
         TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold);
+    int basicScore = Math.pow(2, this._han + 2) * this._hu;
+    List<int> parentScore = [(basicScore * 6 / 100).ceil() * 100, (basicScore * 2 / 100).ceil() * 100];
+    List<int> childScore = [(basicScore * 4 / 100).ceil() * 100, (basicScore / 100).ceil() * 100, (basicScore * 2 / 100).ceil() * 100];
 
     return Column(
       children: [
@@ -64,16 +68,17 @@ class MahjongScoreState extends State<MahjongScore> {
             TableRow(
               children: [
                 Text("親", style: tableTextStyle),
-                Text("${this._parentScore["ron"]}", style: tableTextStyle),
-                Text("${this._parentScore["draw"]}" + "A",
+                Text("${parentScore[0]}", style: tableTextStyle),
+                Text("${parentScore[1]}" + "A",
                     style: tableTextStyle),
               ],
             ),
             TableRow(
               children: [
                 Text("子", style: tableTextStyle),
-                Text("${this._childScore["ron"]}", style: tableTextStyle),
-                Text("${this._childScore["draw"]}", style: tableTextStyle),
+                // Text("${this._childScore["ron"]}", style: tableTextStyle),
+                Text("${childScore[0]}", style: tableTextStyle),
+                Text("${childScore[1]}, ${childScore[2]}", style: tableTextStyle),
               ],
             ),
           ],
@@ -82,9 +87,10 @@ class MahjongScoreState extends State<MahjongScore> {
     );
   }
 
-  int _selectedItem = 30;
+  int _selectedHu = 30;
+  int _selectedHan = 1;
 
-  final List<int> _items = [
+  final List<int> _listHu = [
     20,
     30,
     40,
@@ -98,17 +104,39 @@ class MahjongScoreState extends State<MahjongScore> {
     120,
   ];
 
+  final List<int> _listHan = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+  ];
+
   Widget _pickerItem(int h) {
     return Text(h.toString(), style: TextStyle(fontSize: 32));
   }
 
-  Widget _onSelectedItemChanged(int index) {
+  Widget _onSelectedHuChanged(int index) {
     setState(() {
-      _selectedItem = _items[index];
+      _selectedHu = _listHu[index];
     });
   }
 
-  void _showModalPicker(BuildContext context) {
+  Widget _onSelectedHanChanged(int index) {
+    setState(() {
+      _selectedHan = _listHan[index];
+    });
+  }
+
+  void _showModalPickerHu(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -120,8 +148,29 @@ class MahjongScoreState extends State<MahjongScore> {
             },
             child: CupertinoPicker(
               itemExtent: 40,
-              children: _items.map(_pickerItem).toList(),
-              onSelectedItemChanged: _onSelectedItemChanged,
+              children: _listHu.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedHuChanged,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showModalPickerHan(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: CupertinoPicker(
+              itemExtent: 40,
+              children: _listHan.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedHanChanged,
             ),
           ),
         );
@@ -130,19 +179,29 @@ class MahjongScoreState extends State<MahjongScore> {
   }
 
   Widget _DataArea() {
-    return RaisedButton(
-      onPressed: () {
-        _showModalPicker(context);
-      },
-      child: Text("${_selectedItem}"),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        RaisedButton(
+          onPressed: () {
+            _showModalPickerHu(context);
+          },
+          child: Text("${_selectedHu}"),
+        ),
+        RaisedButton(
+          onPressed: () {
+            _showModalPickerHan(context);
+          },
+          child: Text("${_selectedHan}"),
+        ),
+      ],
     );
   }
 
   void _handlePressed() {
     setState(() {
-      this._hu = _selectedItem;
-      // this._hu++;
-      // this._han++;
+      this._hu = _selectedHu;
+      this._han = _selectedHan;
     });
   }
 
