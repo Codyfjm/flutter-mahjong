@@ -1,9 +1,6 @@
-// Copyright 2018 The Flutter Team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:math' as Math;
 
 void main() => runApp(MyApp());
 
@@ -11,51 +8,545 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
+      title: '麻雀得点計算App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("麻雀得点計算App"),
+          centerTitle: true,
+        ),
+        body: Card(
+          child: MahjongScore(),
+        ),
+      ),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
-  @override
-  RandomWordsState createState() => RandomWordsState();
+List<String> getScore(int hu, int han, bool isChild) {
+  var parentScore = {
+    20: {
+      1: ["-", "-"],
+      2: ["-", "700A"],
+      3: ["-", "1300A"],
+      4: ["-", "2600A"],
+      5: ["-", "4000A"],
+      6: ["-", "6000A"],
+      7: ["-", "6000A"],
+      8: ["-", "8000A"],
+      9: ["-", "8000A"],
+      10: ["-", "8000A"],
+      11: ["-", "12000A"],
+      12: ["-", "12000A"],
+      13: ["-", "16000A"]
+    },
+    30: {
+      1: ["1500", "500A"],
+      2: ["2900", "1000A"],
+      3: ["5800", "2000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    40: {
+      1: ["2000", "700A"],
+      2: ["3900", "1300A"],
+      3: ["7700", "2600A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    50: {
+      1: ["2400", "800A"],
+      2: ["4800", "1600A"],
+      3: ["9600", "3200A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    60: {
+      1: ["2900", "1000A"],
+      2: ["5800", "2000A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    70: {
+      1: ["3400", "1200A"],
+      2: ["6800", "2300A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    80: {
+      1: ["3900", "1300A"],
+      2: ["7700", "2600A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    90: {
+      1: ["4400", "1500A"],
+      2: ["8700", "2900A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    100: {
+      1: ["4800", "1600A"],
+      2: ["9600", "3200A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+    110: {
+      1: ["5300", "1800A"],
+      2: ["10600", "3600A"],
+      3: ["12000", "4000A"],
+      4: ["12000", "4000A"],
+      5: ["12000", "4000A"],
+      6: ["18000", "6000A"],
+      7: ["18000", "6000A"],
+      8: ["24000", "8000A"],
+      9: ["24000", "8000A"],
+      10: ["24000", "8000A"],
+      11: ["36000", "12000A"],
+      12: ["36000", "12000A"],
+      13: ["48000", "16000A"]
+    },
+  };
+  var childScore = {
+    20: {
+      1: ["-", "-"],
+      2: ["-", "400, 700"],
+      3: ["-", "700, 1300"],
+      4: ["-", "1300, 2600"],
+      5: ["-", "2000, 4000"],
+      6: ["-", "3000, 6000"],
+      7: ["-", "3000, 6000"],
+      8: ["-", "4000, 8000"],
+      9: ["-", "4000, 8000"],
+      10: ["-", "4000, 8000"],
+      11: ["-", "6000, 12000"],
+      12: ["-", "6000, 12000"],
+      13: ["-", "8000, 16000"]
+    },
+    30: {
+      1: ["1000", "300, 500"],
+      2: ["2000", "500, 1000"],
+      3: ["3900", "1000, 2000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    40: {
+      1: ["1300", "400, 700"],
+      2: ["2600", "700, 1300"],
+      3: ["5200", "1300, 2600"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    50: {
+      1: ["1600", "400, 800"],
+      2: ["3200", "800, 1600"],
+      3: ["6400", "1600, 3200"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    60: {
+      1: ["2000", "500, 1000"],
+      2: ["3900", "1000, 2000"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    70: {
+      1: ["2300", "600, 1200"],
+      2: ["4500", "1200, 2300"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    80: {
+      1: ["2600", "700, 1300"],
+      2: ["5200", "1300, 2600"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    90: {
+      1: ["2900", "800, 1500"],
+      2: ["5800", "1500, 2900"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    100: {
+      1: ["3200", "800, 1600"],
+      2: ["6400", "1600, 3200"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+    110: {
+      1: ["3600", "900, 1800"],
+      2: ["7100", "1800, 3600"],
+      3: ["8000", "2000, 4000"],
+      4: ["8000", "2000, 4000"],
+      5: ["8000", "2000, 4000"],
+      6: ["12000", "3000, 6000"],
+      7: ["12000", "3000, 6000"],
+      8: ["16000", "4000, 8000"],
+      9: ["16000", "4000, 8000"],
+      10: ["16000", "4000, 8000"],
+      11: ["24000", "6000, 12000"],
+      12: ["24000", "6000, 12000"],
+      13: ["36000", "8000, 16000"]
+    },
+  };
+
+  if (isChild) {
+    return childScore[hu][han];
+  } else {
+    return parentScore[hu][han];
+  }
 }
 
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+class MahjongScore extends StatefulWidget {
+  @override
+  MahjongScoreState createState() => MahjongScoreState();
+}
+
+class MahjongScoreState extends State<MahjongScore> {
+  int _hu = 30;
+  int _han = 1;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
+    return Column(
+      children: <Widget>[
+        _ScoreArea(),
+        _DataArea(),
+        _ButtonArea(),
+      ],
     );
   }
 
-  Widget _buildSuggestions() {
-    return ListView.builder(
-    padding: const EdgeInsets.all(16.0),
-    itemBuilder: /*1*/ (context, i) {
-      if (i.isOdd) return Divider(); /*2*/
+  Widget _ScoreArea() {
+    final tableTextStyle =
+        TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold);
 
-        final index = i ~/ 2; /*3*/
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-        }
-        return _buildRow(_suggestions[index]);
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 30.0, bottom: 50.0),
+          child: Text("${this._hu}符${this._han}翻", style: tableTextStyle),
+        ),
+        Table(
+          children: [
+            TableRow(
+              children: [
+                Center(
+                  child: Text(""),
+                ),
+                Center(
+                  child: Text("ロン", style: tableTextStyle),
+                ),
+                Center(
+                  child: Text("ツモ", style: tableTextStyle),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                Center(
+                  child: Text("親", style: tableTextStyle),
+                ),
+                Center(
+                  child: Text("${getScore(this._hu, this._han, false)[0]}",
+                      style: tableTextStyle),
+                ),
+                Center(
+                  child: Text("${getScore(this._hu, this._han, false)[1]}",
+                      style: tableTextStyle),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                Center(
+                  child: Text("子", style: tableTextStyle),
+                ),
+                Center(
+                  child: Text("${getScore(this._hu, this._han, true)[0]}",
+                      style: tableTextStyle),
+                ),
+                Center(
+                  child: Text("${getScore(this._hu, this._han, true)[1]}",
+                      style: tableTextStyle),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  int _selectedHu = 30;
+  int _selectedHan = 1;
+
+  final List<int> _listHu = [
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+  ];
+
+  final List<int> _listHan = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+  ];
+
+  Widget _pickerItem(int h) {
+    return Text(h.toString(), style: TextStyle(fontSize: 32));
+  }
+
+  Widget _onSelectedHuChanged(int index) {
+    setState(() {
+      _selectedHu = _listHu[index];
     });
   }
 
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+  Widget _onSelectedHanChanged(int index) {
+    setState(() {
+      _selectedHan = _listHan[index];
+    });
+  }
+
+  void _showModalPickerHu(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: CupertinoPicker(
+              itemExtent: 40,
+              children: _listHu.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedHuChanged,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showModalPickerHan(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: CupertinoPicker(
+              itemExtent: 40,
+              children: _listHan.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedHanChanged,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _DataArea() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        RaisedButton(
+          onPressed: () {
+            _showModalPickerHu(context);
+          },
+          child: Text("${_selectedHu}符"),
+        ),
+        RaisedButton(
+          onPressed: () {
+            _showModalPickerHan(context);
+          },
+          child: Text("${_selectedHan}翻"),
+        ),
+      ],
+    );
+  }
+
+  void _handlePressed() {
+    setState(() {
+      this._hu = _selectedHu;
+      this._han = _selectedHan;
+    });
+  }
+
+  Widget _ButtonArea() {
+    return Container(
+      margin: EdgeInsets.only(top: 70.0, bottom: 30.0),
+      child: FlatButton(
+        onPressed: _handlePressed,
+        color: Colors.blue,
+        child: Text(
+          "点数を表示",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
+          ),
+        ),
       ),
     );
   }
 }
-
