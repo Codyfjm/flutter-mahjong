@@ -31,7 +31,7 @@ class MahjongScore extends StatefulWidget {
 
 class MahjongScoreState extends State<MahjongScore> {
   int _selectedHu = 30;
-  int _selectedHan = 2;
+  int _selectedHan = 1;
 
   int _hu;
   int _han;
@@ -92,8 +92,10 @@ class MahjongScoreState extends State<MahjongScore> {
 
   @override
   void initState() {
-    this._hu = this._selectedHu;
-    this._han = this._selectedHan;
+    _hu = _selectedHu;
+    _han = _selectedHan;
+    _childScore = [];
+    _parentScore = [];
     fetchPosts(this._hu, this._han);
 
     super.initState();
