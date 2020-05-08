@@ -10,10 +10,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '麻雀得点計算App',
+      title: '点数確認App',
       home: Scaffold(
         appBar: AppBar(
-          title: Text("麻雀得点計算App"),
+          title: Text("点数確認App"),
           centerTitle: true,
         ),
         body: Container(
