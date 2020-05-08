@@ -72,32 +72,63 @@ class MahjongScoreState extends State<MahjongScore> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          flex: 5,
-          child: _ScoreArea(),
-        ),
-        Expanded(
-          flex: 1,
-          child: _DataArea(),
-        ),
-        Spacer(
-          flex: 1,
-        ),
-        Expanded(
-          flex: 1,
-          child: _ButtonArea(),
-        ),
-        Spacer(
-          flex: 1,
-        ),
-        Expanded(
-          flex: 1,
-          child: Placeholder(),
-        ),
-      ],
-    );
+    if (MediaQuery.of(context).size.width <= 700) {
+      return Container(
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 500,
+                  color: Colors.green,
+                ),
+                Container(
+                  height: 500,
+                  color: Colors.blue,
+                ),
+                Container(
+                  height: 500,
+                  color: Colors.orange,
+                ),
+                Container(
+                  height: 500,
+                  color: Colors.red,
+                ),
+                Container(
+                  height: 500,
+                  color: Colors.yellow,
+                ),
+              ],
+            ),
+          ));
+    } else {
+      return Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: _ScoreArea(),
+          ),
+          Expanded(
+            flex: 1,
+            child: _DataArea(),
+          ),
+          Spacer(
+            flex: 1,
+          ),
+          Expanded(
+            flex: 1,
+            child: _ButtonArea(),
+          ),
+          Spacer(
+            flex: 1,
+          ),
+          Expanded(
+            flex: 1,
+            child: Placeholder(),
+          ),
+        ],
+      );
+    }
   }
 
   void fetchPosts(int hu, int han) {
