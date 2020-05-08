@@ -39,6 +39,8 @@ class MahjongScoreState extends State<MahjongScore> {
   List<int> _childScore = List(3);
   List<int> _parentScore = List(2);
 
+  final tableTextStyle = TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold);
+
   final List<int> _listHu = [
     20,
     30,
@@ -119,10 +121,39 @@ class MahjongScoreState extends State<MahjongScore> {
     fetchPosts(this._hu, this._han);
   }
 
-  Widget _ScoreArea() {
-    final tableTextStyle =
-        TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold);
+  Widget _getScoreTableWidget(String str) {
+    return Container(
+      child: Center(child: Text(str, style: tableTextStyle)),
+    );
+  }
 
+  Widget _getScoreTableRow(List<String> list) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Spacer(
+          flex: 1,
+        ),
+        Expanded(
+          flex: 3,
+          child: _getScoreTableWidget(list[0]),
+        ),
+        Expanded(
+          flex: 3,
+          child: _getScoreTableWidget(list[1]),
+        ),
+        Expanded(
+          flex: 3,
+          child: _getScoreTableWidget(list[2]),
+        ),
+        Spacer(
+          flex: 1,
+        ),
+      ],
+    );
+  }
+
+  Widget _ScoreArea() {
     return Column(
       children: [
         Spacer(
@@ -130,108 +161,23 @@ class MahjongScoreState extends State<MahjongScore> {
         ),
         Expanded(
           flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(child: Text("${this._hu}符${this._han}翻", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(child: Text("ロン", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(child: Text("ツモ", style: tableTextStyle)),
-                ),
-              ),
-              Spacer(
-                flex: 1,
-              ),
-            ],
-          ),
+          child: _getScoreTableRow(["${this._hu}符${this._han}翻", "ロン", "ツモ"]),
         ),
         Expanded(
           flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(child: Text("親", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(
-                      child: Text("${_parentScore[0]}", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(
-                      child:
-                          Text("${_parentScore[1]}A", style: tableTextStyle)),
-                ),
-              ),
-              Spacer(
-                flex: 1,
-              ),
-            ],
-          ),
+          child: _getScoreTableRow(
+              ["親", "${_parentScore[0]}", "${_parentScore[1]}"]),
         ),
         Expanded(
           flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Spacer(
-                flex: 1,
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(child: Text("子", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(
-                      child: Text("${_childScore[0]}", style: tableTextStyle)),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Center(
-                      child: Text("${_childScore[1]}, ${_childScore[2]}",
-                          style: tableTextStyle)),
-                ),
-              ),
-              Spacer(
-                flex: 1,
-              ),
-            ],
-          ),
+          child: _getScoreTableRow([
+            "子",
+            "${_childScore[0]}",
+            "${_childScore[1]}, ${_childScore[2]}"
+          ]),
         ),
         Spacer(
-            flex: 1,
+          flex: 1,
         ),
       ],
     );
@@ -295,37 +241,29 @@ class MahjongScoreState extends State<MahjongScore> {
     );
   }
 
+  Widget _getDataRaisedButton(String str) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.3,
+      height: 50.0,
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        ),
+        onPressed: () {
+          _showModalPickerHu(context);
+        },
+        child: Center(child: Text(str)),
+      ),
+    );
+  }
+
   Widget _DataArea() {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: 50.0,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              onPressed: () {
-                _showModalPickerHu(context);
-              },
-              child: Center(child: Text("${_selectedHu}符")),
-            ),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
-            height: 50.0,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              onPressed: () {
-                _showModalPickerHan(context);
-              },
-              child: Center(child: Text("${_selectedHan}翻")),
-            ),
-          ),
+          _getDataRaisedButton("${_selectedHu}符"),
+          _getDataRaisedButton("${_selectedHan}翻"),
         ],
       ),
     );
