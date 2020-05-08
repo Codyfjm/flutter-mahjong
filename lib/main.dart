@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           title: Text("麻雀得点計算App"),
           centerTitle: true,
         ),
-        body: Card(
+        body: Container(
           child: MahjongScore(),
         ),
       ),
@@ -72,15 +72,35 @@ class MahjongScoreState extends State<MahjongScore> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        _ScoreArea(),
-        _DataArea(),
-        _ButtonArea(),
+        Expanded(
+          flex: 5,
+          child: _ScoreArea(),
+        ),
+        Expanded(
+          flex: 1,
+          child: _DataArea(),
+        ),
+        Spacer(
+          flex: 1,
+        ),
+        Expanded(
+          flex: 1,
+          child: _ButtonArea(),
+        ),
+        Spacer(
+          flex: 1,
+        ),
+        Expanded(
+          flex: 1,
+          child: Placeholder(),
+        ),
       ],
     );
   }
 
   void fetchPosts(int hu, int han) {
-    var url = 'http://192.168.11.105:8000/score?hu=${hu}&han=${han}';
+    var url =
+        'http://ec2-18-179-16-199.ap-northeast-1.compute.amazonaws.com:8000/score?hu=${hu}&han=${han}';
     http.get(url).then((response) {
       setState(() {
         var data = jsonDecode(response.body)[0];
@@ -92,11 +112,11 @@ class MahjongScoreState extends State<MahjongScore> {
 
   @override
   void initState() {
+    super.initState();
+
     this._hu = this._selectedHu;
     this._han = this._selectedHan;
     fetchPosts(this._hu, this._han);
-
-    super.initState();
   }
 
   Widget _ScoreArea() {
@@ -105,62 +125,117 @@ class MahjongScoreState extends State<MahjongScore> {
 
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.only(top: 30.0, bottom: 50.0),
-          child: Text("${this._hu}符${this._han}翻", style: tableTextStyle),
+        Spacer(
+          flex: 1,
         ),
-        Table(
-          children: [
-            TableRow(
-              children: [
-                Center(
-                  child: Text(""),
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(child: Text("${this._hu}符${this._han}翻", style: tableTextStyle)),
                 ),
-                Center(
-                  child: Text("ロン", style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(child: Text("ロン", style: tableTextStyle)),
                 ),
-                Center(
-                  child: Text("ツモ", style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(child: Text("ツモ", style: tableTextStyle)),
                 ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Center(
-                  child: Text("親", style: tableTextStyle),
+              ),
+              Spacer(
+                flex: 1,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(child: Text("親", style: tableTextStyle)),
                 ),
-                Center(
-                  // child: Text("${getScore(this._hu, this._han, false)[0]}",
-                  child: Text("${_parentScore[0]}",
-                      style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(
+                      child: Text("${_parentScore[0]}", style: tableTextStyle)),
                 ),
-                Center(
-                  // child: Text("${getScore(this._hu, this._han, false)[1]}",
-                  child: Text("${_parentScore[1]}A",
-                      style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(
+                      child:
+                          Text("${_parentScore[1]}A", style: tableTextStyle)),
                 ),
-              ],
-            ),
-            TableRow(
-              children: [
-                Center(
-                  child: Text("子", style: tableTextStyle),
+              ),
+              Spacer(
+                flex: 1,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Spacer(
+                flex: 1,
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(child: Text("子", style: tableTextStyle)),
                 ),
-                Center(
-                  child: Text("${_childScore[0]}", style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(
+                      child: Text("${_childScore[0]}", style: tableTextStyle)),
                 ),
-                Center(
-                  child: Text("${_childScore[1]}, ${_childScore[2]}",
-                      style: tableTextStyle),
+              ),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Center(
+                      child: Text("${_childScore[1]}, ${_childScore[2]}",
+                          style: tableTextStyle)),
                 ),
-              ],
-            ),
-          ],
+              ),
+              Spacer(
+                flex: 1,
+              ),
+            ],
+          ),
+        ),
+        Spacer(
+            flex: 1,
         ),
       ],
     );
   }
-
 
   Widget _pickerItem(int h) {
     return Text(h.toString(), style: TextStyle(fontSize: 32));
@@ -221,22 +296,38 @@ class MahjongScoreState extends State<MahjongScore> {
   }
 
   Widget _DataArea() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        RaisedButton(
-          onPressed: () {
-            _showModalPickerHu(context);
-          },
-          child: Text("${_selectedHu}符"),
-        ),
-        RaisedButton(
-          onPressed: () {
-            _showModalPickerHan(context);
-          },
-          child: Text("${_selectedHan}翻"),
-        ),
-      ],
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: 50.0,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              onPressed: () {
+                _showModalPickerHu(context);
+              },
+              child: Center(child: Text("${_selectedHu}符")),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            height: 50.0,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              onPressed: () {
+                _showModalPickerHan(context);
+              },
+              child: Center(child: Text("${_selectedHan}翻")),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -250,15 +341,17 @@ class MahjongScoreState extends State<MahjongScore> {
 
   Widget _ButtonArea() {
     return Container(
-      margin: EdgeInsets.only(top: 70.0, bottom: 30.0),
-      child: FlatButton(
-        onPressed: _handlePressed,
-        color: Colors.blue,
-        child: Text(
-          "点数を表示",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.0,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.7,
+        child: FlatButton(
+          onPressed: _handlePressed,
+          color: Colors.blue,
+          child: Text(
+            "点数を表示",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+            ),
           ),
         ),
       ),
