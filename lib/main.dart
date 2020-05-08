@@ -121,7 +121,7 @@ class MahjongScoreState extends State<MahjongScore> {
 
   Widget _ScoreArea() {
     final tableTextStyle =
-        TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold);
 
     return Column(
       children: [
@@ -137,19 +137,19 @@ class MahjongScoreState extends State<MahjongScore> {
                 flex: 1,
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(child: Text("${this._hu}符${this._han}翻", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(child: Text("ロン", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(child: Text("ツモ", style: tableTextStyle)),
                 ),
@@ -169,20 +169,20 @@ class MahjongScoreState extends State<MahjongScore> {
                 flex: 1,
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(child: Text("親", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(
                       child: Text("${_parentScore[0]}", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(
                       child:
@@ -204,20 +204,20 @@ class MahjongScoreState extends State<MahjongScore> {
                 flex: 1,
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(child: Text("子", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(
                       child: Text("${_childScore[0]}", style: tableTextStyle)),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: Container(
                   child: Center(
                       child: Text("${_childScore[1]}, ${_childScore[2]}",
